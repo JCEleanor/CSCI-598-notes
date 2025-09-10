@@ -1,0 +1,36 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% QUESTION 1 (12 points)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question[12] We have an application that manages and displays data about various kinds of rock formations. The application takes the information from several databases using their APIs. Each database has a different API, which makes our application unnecessarily complicated. We do not want to pollute the code with conditionals that select the right method signature whenever we need to access one of the databases.
+
+Our application makes the following method calls.
+\begin{itemize}[label={}]
+    \item \begin{minted}{Java} 
+public String fetchRockName();
+\end{minted} 
+    \item \begin{minted}{Java} 
+public String fetchRockType();
+    \end{minted}
+    \item \begin{minted}{Java} 
+public String fetchRockLocation();
+    \end{minted}
+    \item \begin{minted}{Java} 
+public Iterator<String> details();
+    \end{minted}
+\end{itemize}
+
+Three of the database services provide these methods.
+However, one database service provides the methods getName(), getType(), getAge(), getComposition(),getLocation(), and getFeatures(). All of these methods return String. 
+Another one provides: rname(), rtype(), rloc(), age(), rdetail().  All of these methods return String except rdetail() returns a list of Strings.
+Suggest a structural design pattern to make our application work with these database services without conditional statements to select the right method name.
+(address all items 1-5)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% YOUR ANSWER HERE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 1) (1 points)
+% 2) (1 points)
+% 3) (4 points)
+% 4) (4 points)
+% 5) (2 points)
+\clearpage
