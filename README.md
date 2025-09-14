@@ -14,7 +14,7 @@
 - Multiplicity
 - Dependency
 
-![alt text](image-1.png)
+![alt text](assets/image-1.png)
 
 #### Composition vs. Aggregation
 
@@ -29,7 +29,7 @@
   - The composite is responsible for the creation and deletion of parts
 
   If the composite is destroyed, its parts must either be destroyed, or attached to another composite
-  ![alt text](image.png)
+  ![alt text](assets/image.png)
 
 #### Dependency
 
@@ -37,13 +37,13 @@ use for depicting global, parameter variable, local variable, and static-method 
 
 To show the type of dependency, a label can be used
 
-![alt text](image-2.png)
+![alt text](assets/image-2.png)
 
 CarFactory depends on the Car class. Car class could be defined without the knowledge of CarFactory class, but CarFactory requires Car for its definition because it produces Cars
 
 Another example:
 
-![alt text](image-3.png)
+![alt text](assets/image-3.png)
 
 ### Design pattern
 
