@@ -1,0 +1,277 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% QUESTION 2 (14 points)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question[14]
+
+We are developing a new mobile game with a "Base Builder" theme. 
+Players can construct complex structures on a map. These structures are composed of smaller, individual building components.
+For example, a {\tt Fortress} might be made of {\tt Walls}, {\tt Towers}, and a {\tt Gate}. 
+A {\tt Tower} might, in turn, be made of a 
+{\tt Base}, a {\tt Body}, and a {\tt Roof}.
+	The game needs to perform operations on these structures, such as 
+{\tt repair}, {\tt upgrade} or {\tt destroy}.
+
+The challenge is that the game's logic needs to treat a single component (like a 
+{\tt Wall} and a complete structure (like an entire 
+{\tt Fortress} uniformly. 
+For example, a player should be able to click on a single wall to repair it, but they should also be able to select the entire fortress and issue a single command to repair every component within it. Currently, the code has separate methods and complex conditional logic to handle single components versus groups, leading to a brittle and unmanageable codebase.
+
+
+Suggest a structural design pattern 
+to simplify the management of these in-game structures.
+
+Initially, we come up with these classes:  Wall, Gate, Roof, Fortress, Tower, and Barracks.
+The operations we have are 
+{\tt repair()} and {\tt destroy() } among others.
+
+In your design, 
+show which class(es) or which objects plays which participant of the pattern.
+(you may use notes on the UML class diagram or just a few sentences under the diagram.)
+
+Address all items 1-5 on the title page of the homework.
+
+Additional tasks:
+
+{\bf Client Code: Behavior Simulation} 
+What is expected in item 4(b).
+
+Write code/pseudocode or class stubs to simulate 
+
+
+\begin{itemize}
+\item
+	Building a Structure: Create a {\tt Fortress} object with several walls and then
+		create a {\tt Tower} object with walls and a roof and make it a part of the Fortress.
+
+\item
+
+Repair Service(using Dependency Injection):
+Write a method that takes an object of type 
+		{\tt Wall}, {\tt Gate}, {\tt Roof}, {\tt Fortress}, {\tt Tower}, or {\tt Barracks}.
+		This method calls the {\tt repair }
+	operation on the object it receives 
+without needing to know if it's a single wall or a more complex building.
+
+		Simulate a repair process on a single {\tt Wall} object.
+
+		Simulate a repair process on the entire {\tt Fortress} object.
+
+\end{itemize}
+
+
+{\bf Extensibility in Action:}
+
+New Component: Imagine a new building component, a Cannon. A Cannon is a single piece of equipment that can be added to a Fortress. 
+
+Challenge: Extend your design to support the Cannon without modifying your existing Repair Service method above.
+
+
+Show how to add a  {\tt Cannon} to the existing hierarchy.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% YOUR ANSWER HERE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{enumerate}
+
+    \item Composite Pattern
+    \item The entire construction follows a tree structure which is what composite pattern designed to deal with. With composite pattern, clients can treat individual objects (such as Walls and Gate) and composite objects (such as Fortress and Tower) uniformly. Other consideration such as façade pattern might be good in terms of simplifying the composite structures, but the client might still have to add a bunch of conditional logic to handle {\tt repair()} and {\tt destroy() }on each object. 
+    \item Show you design with a UML class diagram.
+
+
+    See attachment "composite-builder-application.drawio.pdf"
+
+    \item Give Java or C++ code for your design showing how you have implemented the pattern
+
+    \begin{minted}{Java} 
+    
+import java.util.ArrayList;
+import java.util.List;
+
+interface BuildingComponent {
+    void repair();
+
+    void destroy();
+}
+
+// leaf
+class Wall implements BuildingComponent {
+    String name;
+
+    public Wall(String name) {
+        this.name = name;
+    }
+
+    // @Override
+    public void repair() {
+        System.out.println("Repairing " + name);
+    }
+
+    // @Override
+    public void destroy() {
+        System.out.println("Destroying " + name);
+    }
+}
+
+class Roof implements BuildingComponent {
+    String name;
+
+    public Roof(String name) {
+        this.name = name;
+    }
+
+    // @Override
+    public void repair() {
+        System.out.println("Repairing " + name);
+    }
+
+    // @Override
+    public void destroy() {
+        System.out.println("Destroying " + name);
+    }
+}
+
+class Gate implements BuildingComponent {
+    String name;
+
+    public Gate(String name) {
+        this.name = name;
+    }
+
+    // @Override
+    public void repair() {
+        System.out.println("Repairing " + name);
+    }
+
+    // @Override
+    public void destroy() {
+        System.out.println("Destroying " + name);
+    }
+}
+
+/**
+ * New Component: Imagine a new building component, a Cannon.
+ * A Cannon is a single piece of equipment that can be added to a Fortress.
+ */
+class Cannon implements BuildingComponent {
+    String name;
+
+    public Cannon(String name) {
+        this.name = name;
+    }
+
+    // @Override
+    public void repair() {
+        System.out.println("Repairing " + name);
+    }
+
+    // @Override
+    public void destroy() {
+        System.out.println("Destroying " + name);
+    }
+}
+
+// composite
+class CompositeStructure implements BuildingComponent {
+    private String name;
+    private List<BuildingComponent> children = new ArrayList<>();
+
+    public CompositeStructure(String name) {
+        this.name = name;
+    }
+
+    public void add(BuildingComponent component) {
+        children.add(component);
+    }
+
+    public void remove(BuildingComponent component) {
+        children.remove(component);
+    }
+
+    @Override
+    public void repair() {
+        System.out.println("Repairing " + name);
+        for (BuildingComponent c : children) {
+            c.repair();
+        }
+    }
+
+    @Override
+    public void destroy() {
+        System.out.println("Destroying " + name);
+        for (BuildingComponent c : children) {
+            c.destroy();
+        }
+    }
+}
+
+class Fortess extends CompositeStructure {
+    public Fortess(String name) {
+        super(name);
+    }
+}
+
+class Tower extends CompositeStructure {
+    public Tower(String name) {
+        super(name);
+    }
+}
+
+class RepairService {
+    public void performRepair(BuildingComponent component) {
+        component.repair();
+    }
+}
+
+public class client {
+    public static void main(String[] args) {
+
+        /**
+         * Building a Structure:
+         * Create a Fortress object with several walls and then create a
+         * Tower object with walls and a roof and make it a part of the Fortress.
+         */
+        Fortess fortress = new Fortess("Fortress");
+        fortress.add(new Wall("Fortress Wall 1"));
+        fortress.add(new Wall("Fortress Wall 2"));
+
+        Tower tower = new Tower("tower");
+        tower.add(new Wall("Tower Wall 1"));
+        tower.add(new Wall("Tower Wall 2"));
+
+        fortress.add(tower);
+
+        /**
+         * Repair Service(using Dependency Injection)
+         */
+        RepairService repairService = new RepairService();
+        // Repair single Wall
+        Wall singleWall = new Wall("Single Wall");
+        repairService.performRepair(singleWall);
+
+        /** Extensibility in Action: adding a cannon without modifying repairService */
+
+        Cannon cannon = new Cannon("Cannon 1");
+        // Add new Cannon component to the fortress
+        fortress.add(cannon);
+
+        // Repair a fortress
+        repairService.performRepair(fortress);
+
+    }
+}
+    \end{minted}
+
+    \item Evaluate your design with respect to SOLID principles. 
+
+    \begin{itemize}
+        \item Single Responsibility Principle: Wall repairs itself and Fortress manages its own children 
+        \item Open-Closed Principle: New components like Cannon can be added without modifying existing logic
+        \item Liskov Substitution Principle: The `repair` and `destroy` methods defined in BuildingComponent work on both leaf (Wall, Roof..) and composite structure (Fortress, Tower...)
+        \item Interface Segregation Principle: There are only two methods in `BuildingComponent`
+        \item Dependency Inversion Principle: For example, the RepairService depends on the abstraction class (BuildingComponent)
+    \end{itemize}
+
+\end{enumerate}
+\clearpage
+

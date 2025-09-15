@@ -1,0 +1,193 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% QUESTION 1 (12 points)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question[12] We have an application thatsss manages and displays data about various kinds of rock formations. The application takes the information from several databases using their APIs. Each database has a different API, which makes our application unnecessarily complicated. We do not want to pollute the code with conditionals that select the right method signature whenever we need to access one of the databases.
+
+Our application makes the following method calls.
+\begin{itemize}[label={}]
+    \item \begin{minted}{Java} 
+public String fetchRockName();
+\end{minted} 
+    \item \begin{minted}{Java} 
+public String fetchRockType();
+    \end{minted}
+    \item \begin{minted}{Java} 
+public String fetchRockLocation();
+    \end{minted}
+    \item \begin{minted}{Java} 
+public Iterator<String> details();
+    \end{minted}
+\end{itemize}
+
+Three of the database services provide these methods.
+However, one database service provides the methods getName(), getType(), getAge(), getComposition(),getLocation(), and getFeatures(). All of these methods return String. 
+Another one provides: rname(), rtype(), rloc(), age(), rdetail().  All of these methods return String except rdetail() returns a list of Strings.
+Suggest a structural design pattern to make our application work with these database services without conditional statements to select the right method name.
+(address all items 1-5)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% YOUR ANSWER HERE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{enumerate}
+    \item Adapter Pattern
+    
+    \item Adaptor pattern is to convert the interface of one class to another, so that incompatible interfaces can work together. In this case:
+
+    \begin{itemize}
+        \item Adaptee → the class that already exists but has an incompatible interface. one service has methods like getName(), getType(), etc., while another service has methods like rname(), rtype(), etc.)
+        \item Adapter → the new classes to translate the adaptee’s API into the interface client expects.
+       \item Target → the existing interface
+        \item Client → the application
+    \end{itemize}
+    
+    \item Show you design with a UML class diagram. 
+    
+    See attachment "adaptor-rock-application.drawio.pdf"
+    
+    
+    \item Give Java or C++ code for your design showing how you have implemented the pattern. 
+
+\begin{minted}{Java} 
+
+// Target Interface
+public interface IRockDataSource {
+    String fetchRockName();
+    String fetchRockType();
+    String fetchRockLocation();
+    Iterator<String> details();
+}
+
+public class StandardDBOne implements IRockDataSource {
+    public String fetchRockName() { return "string"; }
+    public String fetchRockType() { return "string"; }
+    public String fetchRockLocation() { return "string"; }
+    public Iterator<String> details() {
+        return Arrays.asList("string", "string").iterator();
+    }
+}
+
+public class StandardDBTwo implements IRockDataSource {
+    public String fetchRockName() { return "string"; }
+    public String fetchRockType() { return "string"; }
+    public String fetchRockLocation() { return "string"; }
+    public Iterator<String> details() {
+        return Arrays.asList("string", "string").iterator();
+    }
+}
+
+public class StandardDBThree implements IRockDataSource {
+    public String fetchRockName() { return "string"; }
+    public String fetchRockType() { return "string"; }
+    public String fetchRockLocation() { return "string"; }
+    public Iterator<String> details() {
+        return Arrays.asList("string", "string").iterator();
+    }
+}
+
+// Incompatible service #1
+class IncompatibleDBOne {
+    public String getName() { return "string"; }
+    public String getType() { return "string"; }
+    public String getAge() { return "string"; }
+    public String getComposition() { return "string"; }
+    public String getLocation() { return "string"; }
+    public String getFeatures() { return "string"; }
+}
+
+calss IncompatibleDBOneAdaptor implements IRockDataSource {
+    private IncompatibleDBOne incompatibleDB;
+    public IncompatibleDBOneAdaptor(IncompatibleDBOne dbService){
+        this.incompatibleDB = dbService;
+    }
+
+    @Override
+    public String fetchRockName() { return incompatibleDB.getName(); }
+
+    @Override
+    public String fetchRockType() { return incompatibleDB.getType(); }
+
+    @Override
+    public String fetchRockLocation() { return incompatibleDB.getLocation(); }
+
+    @Override
+    public Iterator<String> details() {
+        return Arrays.asList(
+            incompatibleDB.getAge(), 
+            incompatibleDB.getComposition(), 
+            incompatibleDB.getFeatures(), 
+            ).iterator();
+    }
+}
+
+// Incompatible service #2
+class IncompatibleDBTwo {
+    public String rname() { return "string"; }
+    public String rtype() { return "string"; }
+    public String rloc() { return "string"; }
+    public String age() { return "string"; }
+    public List<String> rdetail() {
+        return Arrays.asList("string", "string");
+    }
+}
+
+calss IncompatibleDBTwoAdaptor implements IRockDataSource {
+    private IncompatibleDBTwo incompatibleDB;
+    public IncompatibleDBTwoAdaptor(IncompatibleDBTwo dbService){
+        this.incompatibleDB = dbService;
+    }
+
+    @Override
+    public String fetchRockName() { return incompatibleDB.rname(); }
+
+    @Override
+    public String fetchRockType() { return incompatibleDB.rtype(); }
+
+    @Override
+    public String fetchRockLocation() { return incompatibleDB.rloc(); }
+
+    @Override
+    public Iterator<String> details() { 
+        // TODO: switch type to from List<String> to Iterator<String>
+        return incompatibleDB.rdetail(); 
+    }
+}
+
+public class Main {
+public static void main(String[] args) {
+        List<RockDataSource> sources = Arrays.asList(
+            new StandardDBOne(),
+            new StandardDBTwo(),
+            new StandardDBThree(),
+            new IncompatibleDBOneAdaptor( new IncompatibleDBOne() ),
+            new IncompatibleDBTwoAdaptor( new IncompatibleDBTwo() ),
+        );
+
+        for (RockDataSource src : sources) {
+            System.out.println("Rock: " + src.fetchRockName());
+            System.out.println("Type: " + src.fetchRockType());
+            System.out.println("Location: " + src.fetchRockLocation());
+            System.out.println("Details: ");
+            src.details().forEachRemaining(System.out::println);
+        }
+    }
+}
+\end{minted}
+
+
+    \item Evaluate your design with respect to SOLID principles. 
+\end{enumerate}
+
+\begin{itemize}
+    \item Single Responsibility Principle: Every adapter has only one responsibility.
+    \item Open-Closed Principle: New adapters can be added in the future without modifying existing logic
+    \item Liskov Substitution Principle: N/A
+    \item Interface Segregation Principle: Client only depends on `IRockDataSource`, which it consumes
+    \item Dependency Inversion Principle: client depends on the abstraction (RockDataSource) rather than concrete classes
+\end{itemize}
+
+
+
+
+
+
