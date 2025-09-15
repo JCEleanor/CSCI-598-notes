@@ -59,27 +59,27 @@ public interface IRockDataSource {
 }
 
 public class StandardDBOne implements IRockDataSource {
-    public String fetchRockName() { return "string"; }
-    public String fetchRockType() { return "string"; }
-    public String fetchRockLocation() { return "string"; }
+    public String fetchRockName() { return "StandardDBOne name"; }
+    public String fetchRockType() { return "StandardDBOne type"; }
+    public String fetchRockLocation() { return "StandardDBOne location"; }
     public Iterator<String> details() {
         return Arrays.asList("string", "string").iterator();
     }
 }
 
 public class StandardDBTwo implements IRockDataSource {
-    public String fetchRockName() { return "string"; }
-    public String fetchRockType() { return "string"; }
-    public String fetchRockLocation() { return "string"; }
+    public String fetchRockName() { return "StandardDBTwo name"; }
+    public String fetchRockType() { return "StandardDBTwo type"; }
+    public String fetchRockLocation() { return "StandardDBTwo location"; }
     public Iterator<String> details() {
         return Arrays.asList("string", "string").iterator();
     }
 }
 
 public class StandardDBThree implements IRockDataSource {
-    public String fetchRockName() { return "string"; }
-    public String fetchRockType() { return "string"; }
-    public String fetchRockLocation() { return "string"; }
+    public String fetchRockName() { return "StandardDBThree name"; }
+    public String fetchRockType() { return "StandardDBThree type"; }
+    public String fetchRockLocation() { return "StandardDBThree location"; }
     public Iterator<String> details() {
         return Arrays.asList("string", "string").iterator();
     }
@@ -87,12 +87,12 @@ public class StandardDBThree implements IRockDataSource {
 
 // Incompatible service #1
 class IncompatibleDBOne {
-    public String getName() { return "string"; }
-    public String getType() { return "string"; }
-    public String getAge() { return "string"; }
-    public String getComposition() { return "string"; }
-    public String getLocation() { return "string"; }
-    public String getFeatures() { return "string"; }
+    public String getName() { return "IncompatibleDBOne getName"; }
+    public String getType() { return "IncompatibleDBOne getType"; }
+    public String getAge() { return "IncompatibleDBOne getAge"; }
+    public String getComposition() { return "IncompatibleDBOne getComposition"; }
+    public String getLocation() { return "IncompatibleDBOne getLocation"; }
+    public String getFeatures() { return "IncompatibleDBOne getFeatures"; }
 }
 
 calss IncompatibleDBOneAdaptor implements IRockDataSource {
@@ -122,10 +122,10 @@ calss IncompatibleDBOneAdaptor implements IRockDataSource {
 
 // Incompatible service #2
 class IncompatibleDBTwo {
-    public String rname() { return "string"; }
-    public String rtype() { return "string"; }
-    public String rloc() { return "string"; }
-    public String age() { return "string"; }
+    public String rname() { return "IncompatibleDBTwo rname"; }
+    public String rtype() { return "IncompatibleDBTwo rtype"; }
+    public String rloc() { return "IncompatibleDBTwo rloc"; }
+    public String age() { return "IncompatibleDBTwo age"; }
     public List<String> rdetail() {
         return Arrays.asList("string", "string");
     }
@@ -148,8 +148,7 @@ calss IncompatibleDBTwoAdaptor implements IRockDataSource {
 
     @Override
     public Iterator<String> details() { 
-        // TODO: switch type to from List<String> to Iterator<String>
-        return incompatibleDB.rdetail(); 
+        return incompatibleDB.rdetail().iterator();
     }
 }
 
@@ -175,6 +174,7 @@ public static void main(String[] args) {
 \end{minted}
 
 
+
     \item Evaluate your design with respect to SOLID principles. 
 \end{enumerate}
 
@@ -182,7 +182,7 @@ public static void main(String[] args) {
     \item Single Responsibility Principle: Every adapter has only one responsibility.
     \item Open-Closed Principle: New adapters can be added in the future without modifying existing logic
     \item Liskov Substitution Principle: N/A
-    \item Interface Segregation Principle: Client only depends on `IRockDataSource`, which it consumes
+    \item Interface Segregation Principle: Client only depends on `IRockDataSource`, which only contains the necessary methods
     \item Dependency Inversion Principle: client depends on the abstraction (RockDataSource) rather than concrete classes
 \end{itemize}
 

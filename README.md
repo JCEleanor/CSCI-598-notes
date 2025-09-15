@@ -86,3 +86,35 @@ t = new Border(t)
 - adaptor vs. decorator
   - adaptor is altering existing functionalities
   - decorator is adding new functionalities
+
+### 0915 proxy pattern
+
+provide a <b> placeholder </b> for another object to <b> control access </b> to it
+
+A proxy object controls access to another object, which may be:
+
+- remote
+- expensive to create
+- in need of protection, require permssion
+  - for example, when implementng RBA is an overkill, use a security proxy to require permssion
+- or need a smart referene doing more than a simple pointer
+
+- virtual proxy
+  sometimes creating an object or calling a class is too expensive
+  in java, lazy initialization (set it to null and define it later) or create an empty object and do dependency injection to it late (?)
+
+- protection proxy
+  overloading the member accesss in C++. The proxy behaves just like a pointer.
+  - smart pointer in C++ (acts like proxy)
+  - in c ++, if you delete a reference but don't delete it in a heap (stack), there will be memory leak
+  - java has garbage collection so you don't have to worry about that
+  - dangling pointer (?
+
+The above is more about the implementation details. The key takeaway is that pointer is implementing proxy design pattern
+
+- copy on write
+  Copy-on-write (CoW) is a resource management technique where a shared data copy is only duplicated when a process or system attempts to modify it, rather than immediately duplicating all data
+
+- related patterns
+  - adaptor (proxy doesn't translate interface; it delegates the job)
+  - decorator
