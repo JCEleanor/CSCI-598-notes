@@ -1,0 +1,38 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% QUESTION 2 (10+7+8 points)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question[25] We are developing a software application for an energy company, and we need to access the weather history data from a database. We make queries by date or by location. An example weather data is: “Golden CO, November 10th, 2021, daytime, average temperature 54°F, 57\% Humidity”. This information does not change once it is inserted into the weather history database.
+\begin{parts}
+\part[10] For performance considerations, we do not want to access the database each time we need the weather data in our application. Since the weather data does not change once it enters the history, we could use caching (preloading the data) and return the cashed values whenever weather information is requested instead of database access. We access the database only when the requested data is not in the cache. Whether the data is cached or not should be a concern for the rest of the application.
+Suggest a structural design pattern for this purpose. 
+(address all items 1-5)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% YOUR ANSWER HERE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 1) (1 points)
+% 2) (1 points)
+% 3) (3 points)
+% 4) (3 points)
+% 5) (1 points)
+\part[7] We have switched to a remote weather database. Currently, the remote connection, sending and receiving data using HTTP or Rest API request are all over the codebase. 
+Suggest a structural pattern so that the rest of the application is not dependent on such remote procedures.  
+(address items 1-4)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% YOUR ANSWER HERE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 1) (1 points)
+% 2) (1 points)
+% 3) (3 points)
+% 4) (2 points)
+\part[8] I want to restructure my code. Currently there are five interconnected classes that are responsible for weather data access and processing. I want to give simplified access to these from my energy related components. (You may assume any name for the five interconnected classes).
+Suggest a structural design pattern that would simplify this and discuss advantages and disadvantages of your design.
+(address items 1,2,3,5)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% YOUR ANSWER HERE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 1) (1 points)
+% 2) (1 points)
+% 3) (5 points)
+% 5) (1 points)
+\end{parts}
+\clearpage

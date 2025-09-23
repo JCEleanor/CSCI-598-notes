@@ -1,0 +1,27 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% QUESTION  (15 points)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question[15] Your team has designed a system to manage the security of a hierarchical network of computers, implemented using the Composite pattern. The network consists of a main server (a composite node) connected to several sub-servers (composite nodes), each connected to multiple client computers (leaf nodes). The system supports the following requirements:
+
+{\bf Security Checks:} Each component (main server, sub-server, or client) supports basic security checks: scanning for malware, updating antivirus software, and applying security patches. As an admin, you can initiate these checks at any component (e.g., the main server for the entire network, a sub-server for its sub-network, or a single client).
+Dynamic Additional Checks: Certain components require additional security measures based on specific conditions:
+
+Servers handling sensitive data must perform an additional encryption check.
+Any component that has failed any of the last five security checks requires an extra deep security scan. If a component passes five consecutive checks, this scan is removed. (Note: This is a simplified scenario for educational purposes.)
+
+
+{\bf Flexibility:} The system must support adding new types of security checks and new component types in the future without modifying existing code.
+
+Given that the network hierarchy is implemented using the Composite pattern, design a solution using a structural design pattern to handle the dynamic addition and removal of security checks as described. Justify your choice of pattern, explaining how it complements the Composite structure and meets the flexibility requirements.
+
+(address all items 1-5)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% YOUR ANSWER HERE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 1) (1 points)
+% 2) (1 points)
+% 3) (5 points)
+% 4) (5 points)
+% 5) (2 points)
+
+\clearpage

@@ -1,0 +1,103 @@
+\documentclass[12pt]{exam}
+
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{algorithm}
+\usepackage{float}  % Figure placement
+\usepackage{minted}  % Code highlighting   %latex -shell-escape structural1.tex
+\usepackage{tikz}  % Flow chart
+\usepackage{lipsum}
+\usepackage{xspace}
+\usepackage{hyperref}
+\usepackage{MnSymbol}
+\usepackage{pgffor}
+\usepackage{colortbl}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{mdframed}
+\usepackage{enumitem}
+\usetikzlibrary{shapes.geometric} % For geometric shapes
+
+
+\hypersetup{
+    colorlinks = true,
+    linkcolor = blue,
+    urlcolor  = blue,
+    citecolor = blue,
+    anchorcolor = blue
+}
+
+\newcommand{\hwheaderfooter}[3]{
+\pagestyle{headandfoot}
+\firstpageheadrule
+\firstpageheader{#1}{#2}{#3}
+\firstpagefooter{}{\thepage}{}
+\runningfooter{}{\thepage}{}
+}
+
+\hwheaderfooter{}{HW2: Structural Patterns-2 }{CSCI 498B/598B}
+
+
+\begin{document}
+\begin{center}
+  \fbox{\fbox{\parbox{\textwidth - 0.2 in}
+	{\centering
+
+\small
+{\textbf{Formating Instructions:} Please use this provided \LaTeX\xspace template to complete your homework. When including figures such as UMLs, it is highly encouraged to use tools ( \href{https://dreampuf.github.io/GraphvizOnline/}{graphviz}, \href{https://www.drawio.com/}{drawio}, \href{https://www.overleaf.com/learn/latex/TikZ_package}{tikz}, etc..). Figures may be hand draw, however, these may not receive credit if the grader cannot read it.
+For ease of grading, when including code please have it as part of the same pdf as the question while also including correct formatting/indent, preferably syntax highlighting. Latex includes the \href{https://www.overleaf.com/learn/latex/Code_Highlighting_with_minted}{minted}, or \href{https://www.overleaf.com/learn/latex/Code_listing}{lstlisting} package as a helpful tool. For this assignment all code must be full code (no pseudo-code) and be written in either Java or C++. However, implements may ignore all logic not relevant to the design pattern with simple print out statements of "[BLANK] logic done here"}
+}
+	}}
+\end{center}
+
+\small
+\begin{center}
+  \fbox{\fbox{\parbox{\textwidth - 0.2in}
+	{\centering
+	{ \raggedright
+{\textbf{Question Instructions:} In this homework assignment, you will apply one or more Structural patterns discussed in the lectures.
+
+This is a group assignment that requires two students per group.
+
+{\bf For each question:}
+	}
+%{\bf In your answer:}
+
+\begin{enumerate}
+    \item Give the name of the design pattern(s) you are applying to the problem. 
+    \item Present your reasons why this pattern will solve the problem. Please be specific to the problem and do not give general applicability statements. If there is an alternative pattern, explain why you preferred this one.. 
+    \item Show you design with a UML class diagram. If the pattern collaborations would be more visible with another diagram (e.g. sequence diagram), give that diagram as well.
+    \begin{enumerate}
+        \item Your diagram should show every participant in the pattern including the pattern related methods.
+        \item In pattern related classes, give the member (method and attribute) names that play a role in the pattern and effected by the pattern. Optionally, include the member names mentioned in the question. You are encouraged to omit the other methods and fields.
+        \item For the non-pattern related classes, you are not expected to give detailed class names etc. You may give a high-level component, like “UserInterface” or “DBManagement”  
+    \end{enumerate}
+    \item Give Java or C++ code for your design showing how you have implemented the pattern. 
+    \begin{enumerate}
+        \item Pattern related methods and attributes should appear in the code
+        \item Client usage of the pattern should appear in the code
+        \item Non-pattern related parts of the methods could be a simple print. (e.g. "System.out.println()", "cout”) 
+    \end{enumerate}
+    \item Evaluate your design with respect to SOLID principles. Each principle should be address, if a principle is not applicable to the current pattern, say so. 
+\end{enumerate}
+}
+}}}
+\end{center}
+\clearpage
+
+\begin{questions}
+	\input{structural2_1}
+	\input{structural2_2}
+\end{questions}
+
+\newpage
+\input{rubric14}
+\newpage
+Use Table \ref{rubric12} for Question1 and Table \ref{rubricS2} for Question2.
+
+\input{rubric12}
+\input{rubric10}
+
+\input{rubric_structural2}
+
+\end{document}
