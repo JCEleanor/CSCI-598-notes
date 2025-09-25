@@ -118,3 +118,7 @@ The above is more about the implementation details. The key takeaway is that poi
 - related patterns
   - adaptor (proxy doesn't translate interface; it delegates the job)
   - decorator
+
+### 0922 bridge
+
+### 0924 flyweight
