@@ -1,5 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 // Component Interface
 interface NetworkComponent {
@@ -10,11 +9,16 @@ interface NetworkComponent {
     void updateAntivirus();
 
     void applySecurityPatches();
+
+    void recordCheckResult(boolean passed);
+
+    boolean needsDeepScan();
 }
 
 // Leaf: Client Computer
 class ClientComputer implements NetworkComponent {
     private String name;
+    private Queue<Boolean> lastFiveChecks = new LinkedList<>();
 
     public ClientComputer(String name) {
         this.name = name;
@@ -23,6 +27,28 @@ class ClientComputer implements NetworkComponent {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public void recordCheckResult(boolean passed) {
+        if (lastFiveChecks.size() >= 5) {
+            lastFiveChecks.poll(); // Remove oldest result
+        }
+        lastFiveChecks.offer(passed);
+
+        System.out.println(name + " check result: " + (passed ? "PASSED" : "FAILED"));
+        System.out.println(name + " last " + lastFiveChecks.size() + " checks: " + lastFiveChecks);
+    }
+
+    @Override
+    public boolean needsDeepScan() {
+        // Needs deep scan if any of the last 5 checks failed
+        for (Boolean result : lastFiveChecks) {
+            if (!result) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // Implement the basic checks for the leaf node
@@ -40,12 +66,14 @@ class ClientComputer implements NetworkComponent {
     public void applySecurityPatches() {
         System.out.println("Client " + name + ": Applying security patches.");
     }
+
 }
 
 // Abstract Composite: AbstractServer
 abstract class AbstractServer implements NetworkComponent {
     protected String name;
     protected List<NetworkComponent> children = new ArrayList<>();
+    private Queue<Boolean> lastFiveChecks = new LinkedList<>();
 
     public AbstractServer(String name) {
         this.name = name;
@@ -61,8 +89,29 @@ abstract class AbstractServer implements NetworkComponent {
     }
 
     @Override
+    public void recordCheckResult(boolean passed) {
+        if (lastFiveChecks.size() >= 5) {
+            lastFiveChecks.poll();
+        }
+        lastFiveChecks.offer(passed);
+
+        System.out.println(name + " check result: " + (passed ? "PASSED" : "FAILED"));
+        System.out.println(name + " last " + lastFiveChecks.size() + " checks: " + lastFiveChecks);
+    }
+
+    @Override
+    public boolean needsDeepScan() {
+        for (Boolean result : lastFiveChecks) {
+            if (!result) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     public void scanForMalware() {
-        System.out.println("Server " + name + ": Initiating malware scan for sub-network");
+        System.out.println("Server " + name + ": Initiating malware scan");
         for (NetworkComponent c : children) {
             c.scanForMalware();
         }
@@ -70,7 +119,7 @@ abstract class AbstractServer implements NetworkComponent {
 
     @Override
     public void updateAntivirus() {
-        System.out.println("Server " + name + ": Initiating antiVirus update for sub-network");
+        System.out.println("Server " + name + ": Initiating antiVirus update");
         for (NetworkComponent c : children) {
             c.updateAntivirus();
         }
@@ -78,7 +127,7 @@ abstract class AbstractServer implements NetworkComponent {
 
     @Override
     public void applySecurityPatches() {
-        System.out.println("Server " + name + ": Initiating security patch for sub-network");
+        System.out.println("Server " + name + ": Initiating security patch");
         for (NetworkComponent c : children) {
             c.applySecurityPatches();
         }
@@ -110,6 +159,16 @@ abstract class SecurityDecorator implements NetworkComponent {
     }
 
     @Override
+    public void recordCheckResult(boolean passed) {
+        component.recordCheckResult(passed);
+    }
+
+    @Override
+    public boolean needsDeepScan() {
+        return component.needsDeepScan();
+    }
+
+    @Override
     public void scanForMalware() {
         component.scanForMalware();
     }
@@ -133,7 +192,7 @@ class EncryptionCheckDecorator extends SecurityDecorator {
 
     @Override
     public void scanForMalware() {
-        System.out.println(component.getName() + ": Running Encryption Check");
+        System.out.println(component.getName() + " Running Encryption Check");
         super.scanForMalware();
     }
 }
@@ -146,12 +205,38 @@ class DeepScanCheckDecorator extends SecurityDecorator {
 
     @Override
     public void scanForMalware() {
-        System.out.println(component.getName() + ": Running Deep Scan");
+        System.out.println(component.getName() + " Running Deep Scan");
         super.scanForMalware();
     }
 }
 
 public class SecurityManagerDemo {
+    private static Random random = new Random();
+
+    // Simulate security check results
+    private static boolean simulateSecurityCheck() {
+        return random.nextBoolean();
+    }
+
+    // Utility function to apply decorators based on component needs
+    private static NetworkComponent applyDecorators(NetworkComponent component, boolean hasSensitiveData) {
+        NetworkComponent decorated = component;
+
+        // Apply encryption check for components with sensitive data
+        if (hasSensitiveData) {
+            System.out.println("Applying Encryption Check decorator to " + component.getName());
+            decorated = new EncryptionCheckDecorator(decorated);
+        }
+
+        // Apply deep scan for components that failed recent checks
+        if (component.needsDeepScan()) {
+            System.out.println("Applying Deep Scan decorator to " + component.getName());
+            decorated = new DeepScanCheckDecorator(decorated);
+        }
+
+        return decorated;
+    }
+
     public static void main(String[] args) {
         MainServer mainServer = new MainServer("MainServer");
         SubServer subServerA = new SubServer("subServerA");
@@ -159,14 +244,34 @@ public class SecurityManagerDemo {
         ClientComputer client4 = new ClientComputer("client4");
 
         subServerA.add(client4);
-
-        // add multiple security checks to client3
-        NetworkComponent decoratedClient3 = new EncryptionCheckDecorator(new DeepScanCheckDecorator(client3));
-
-        subServerA.add(decoratedClient3);
+        subServerA.add(client3);
         mainServer.add(subServerA);
 
-        mainServer.scanForMalware();
+        // Simulate 6 rounds of security checks
+        for (int round = 1; round <= 6; round++) {
+            System.out.println("Round " + round);
 
+            // Simulate check results for each component
+            boolean mainServerResult = simulateSecurityCheck();
+            boolean subServerResult = simulateSecurityCheck();
+            boolean client3Result = simulateSecurityCheck();
+            boolean client4Result = simulateSecurityCheck();
+
+            // Record results
+            mainServer.recordCheckResult(mainServerResult);
+            subServerA.recordCheckResult(subServerResult);
+            client3.recordCheckResult(client3Result);
+            client4.recordCheckResult(client4Result);
+
+            // Apply decorators dynamically based on needs
+            NetworkComponent _decoratedClient3 = applyDecorators(client3, true);
+            NetworkComponent _decoratedClient4 = applyDecorators(client4, false);
+            NetworkComponent _decoratedSubServer = applyDecorators(subServerA, true);
+            NetworkComponent _decoratedMainServer = applyDecorators(mainServer, true);
+
+            // Can add more checks based on needs:
+            // decoratedClient3.scanForMalware();
+            System.out.println("\n");
+        }
     }
 }
