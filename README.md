@@ -122,3 +122,18 @@ The above is more about the implementation details. The key takeaway is that poi
 ### 0922 bridge
 
 ### 0924 flyweight
+
+### 0924 prototype
+
+- prototype is sort of like flyweight, but it's not shared. it cloned a new object (like p.6 slides)
+
+### midterm
+
+(expect one question about creational patern)
+FROM DAY1 to TODAY (1006)
+
+1. intent and pattern name match
+2. compare two patterns
+3. class UML diagram distinguish pattern
+4. scenario and decide which pattern to use
+5. sth like the in-class exercise, be sure to write code that implement the pattern

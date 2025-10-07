@@ -53,27 +53,50 @@ class Movie extends MediaType {
     }
 }
 
+// Refined Abstraction 3
+class AudioTape extends MediaType {
+    public AudioTape(Format formatter) {
+        super(formatter);
+    }
+}
+
 class Client {
     public static void main(String[] args) {
         Format webFormat = new HTMLFormatter();
         Format paperFormat = new PaperFormatter();
 
         MediaType book = new Book(webFormat);
+        // print book in web format
         book.print("Book");
 
         System.out.println();
 
         book = new Book(paperFormat);
+        // print book in paper format
         book.print("book");
 
         System.out.println();
 
         MediaType movie = new Movie(paperFormat);
+        // print movie info in paper format
         movie.print("movie");
 
         System.out.println();
 
         movie = new Movie(webFormat);
+        // print movie info in web format
         movie.print("movie");
+
+        System.out.println();
+
+        MediaType audioTape = new AudioTape(paperFormat);
+        // print audio tape info in paper format
+        audioTape.print("audoio tape");
+
+        System.out.println();
+
+        audioTape = new Movie(webFormat);
+        // print audio tape info in web format
+        audioTape.print("movie");
     }
 }
