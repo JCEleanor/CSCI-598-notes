@@ -1,5 +1,7 @@
 # In-class exercise: Cloud-Based AI Inference Service
 
+- smartpointer in c++ is like a proxy
+
 ### Task 1
 
 Define an interface for AI inference that the system can depend on (e.g., IAIInference with a method generateResponse(prompt)).

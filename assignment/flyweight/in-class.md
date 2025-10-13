@@ -121,3 +121,8 @@ public class GameSimulation {
     }
 }
 ```
+
+### feedback
+
+The client would have a reference to Particle, ParticleType, and ParticleTypeFactory. They are all
+concrete classes with no inheritance so there should only be solid arrows to represent dependency.

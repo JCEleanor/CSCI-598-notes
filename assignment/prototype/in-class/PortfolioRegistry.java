@@ -1,6 +1,5 @@
 import java.util.HashMap;
 import java.util.Map;
-import assignment.prototype.*;
 
 // This registry allows us to avoid a large class hierarchy of factories.
 // We have one manager that can produce clones of any registered prototype.

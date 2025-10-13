@@ -132,8 +132,28 @@ The above is more about the implementation details. The key takeaway is that poi
 (expect one question about creational patern)
 FROM DAY1 to TODAY (1006)
 
-1. intent and pattern name match
-2. compare two patterns
-3. class UML diagram distinguish pattern
-4. scenario and decide which pattern to use
-5. sth like the in-class exercise, be sure to write code that implement the pattern
+#### q1- know the pattern names and their intents
+
+- structural:
+  - ( ) composite: treat composite & leaf uniformly through a common interface (think network)
+  - ( ) decorator: add responsibilities to objects dynamically (think coffee)
+  - ( ) adaptor: convert one interface into another, so incompatible classes work togther
+  - façade: provide unified interface to a set of subsystems for ease of use
+  - proxy: provide a placeholder for access control, cache etc.
+  - ( )bridge: decouple abstraction from implementation, so that they can vary independently
+  - ( )flyweight: support large number of fined grained objects
+- creational: (They rarely use constructors directly. Useful when taking advantage of polymorphism and need to choose between different classes at runtime rather than compile time)
+  - ( ) singleton: ensure object has only one instance and globally accessible (lazy initialization)
+  - ( )factory: define a virtual constructor in a creator class but defer object creation to subclasses
+  - ( )abstract factory: create an instance from related classes without specifying concrete name
+  - ( )prototype: create objects by cloning existing instances
+
+#### q2-compare 2 patterns by giving 2- 3 similarities and 2-3 differences. when would you use x rather then y
+
+- flyweight & prototype
+
+#### q3-given a UML what pattern is it? Draw a sequence diagram to show how xx operates
+
+#### q4-given 3-4 scenarios, what pattern suits best why?
+
+#### q5 and q6: given a scenario, solve the problem. give patten name, explain why. give uml, give pattern related code, give client code
