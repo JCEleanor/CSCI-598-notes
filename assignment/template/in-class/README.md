@@ -146,3 +146,34 @@ public class CheckoutClient {
     }
 }
 ```
+
+## The Hollywood Principle & The Template Method
+
+This principle is a core concept in software design, often summarized as: "Don't call us, we'll call you."
+In our e-commerce example, this design pattern creates a clear relationship between the abstract OrderProcessor (the framework) and its concrete subclasses (the components).
+
+1. "Hollywood" (The Framework)
+   Who it is: The OrderProcessor abstract class, specifically its final processOrder() method.
+   What it does: This high-level "studio" dictates the entire flow of the algorithm. It knows the exact, unchangeable sequence:
+
+```
+validate()
+calculateTotal()
+processPayment()
+sendConfirmation()
+```
+
+The Rule: It retains all control over the process.
+
+2. "Us" (The Low-Level Components)
+   Who they are: The concrete subclasses, like StandardOrderProcessor and ExpressOrderProcessor.
+   What they do: These "actors" are hired only to provide specific implementations for the abstract parts (validate(), calculateTotal()) and optional overrides for hooks (sendConfirmation()).
+   The Rule: They do not decide the order of operations. They simply wait to be told what to do.
+   The "Don't Call Us, We'll Call You" Interaction
+   The StandardOrderProcessor (the component) never calls the OrderProcessor (the framework) to tell it what to do next.
+   Instead, when the client calls processor.processOrder(), the framework takes charge and "calls" the components when it needs them:
+   Framework: "It's time for validation. I'll call your validate() method."
+   Framework: "Now it's time for calculation. I'll call your calculateTotal() method."
+   Framework: "I'll handle this next part myself (processPayment())."
+   Framework: "Finally, it's time for confirmation. I'll call your sendConfirmation() method."
+   This is also known as Inversion of Control (IoC), where the high-level framework controls the flow of execution and calls the low-level components, not the other way around.
