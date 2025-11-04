@@ -154,7 +154,7 @@ int main() {
 
 ### Your Task
 
-````c++
+```c++
 // The "Good" Way: Decoupled (using Contender 1)
 class Command { public: virtual void execute() = 0; }; // The interface
 class GoodButton {
@@ -185,14 +185,14 @@ Sketch out the new `ButtonForFunctor` class.
 // Refactored for Functor (Contender 2)
 class  {
 private:
-    std::unique_ptr<Command> myCommand; // Command from Contender 2 is a functor
+    std::unique_ptr<Command> myCommand;
 public:
     void setCmd(Command* c) {
-        myCommand.reset(c); // Take ownership of the command
+        myCommand.reset(c);
     }
 
     void onClick() {
-        if (myCommand) { (*myCommand)(); } // Call the functor
+        if (myCommand) { (*myCommand)(); }
     }
 };
 ```
@@ -215,15 +215,23 @@ public:
     }
 
     void onClick() {
-        if (myCommand) { myCommand(); } // Call the stored lambda/function
+        if (myCommand) { myCommand(); }
     }
 };
+
 ```
 
 ### Discussion
 
-1. How did the Button's implementation change for each contender?
-2. How is the invoker affected in these two refactorings?
+1.  **How did the Buttons implementation change for each contender?**
+    *   **Contender 1 (Classic OOP):** The `GoodButton` stores a raw pointer to a `Command` interface (`Command* myCommand;`) and invokes the command via `myCommand->execute()`.
+    *   **Contender 2 (Functor Model):** The `ButtonForFunctor` stores a `std::unique_ptr<Command>` (where `Command` is now a functor interface) and invokes the command by calling the overloaded function call operator: `(*myCommand)()`. The `setCmd` method also adapted to use `std::unique_ptr`'s `reset` method.
+    *   **Contender 3 (Lambda / `std::function` Model):** The `ButtonForLambda` stores a `std::function<void()>` and directly invokes it as a function: `myCommand()`. The `setCmd` method now accepts a `std::function<void()>` directly.
 
-   This shows the real "magic" of Command: the Button's logic is always simple. The implementation of the command object can change, but the Invoker's design stays decoupled and simple.
-````
+2.  **How is the invoker affected in these two refactorings?**
+    The invoker (represented by `RemoteControl` in the examples, and `GoodButton`/`ButtonForFunctor`/`ButtonForLambda` in the task) is affected primarily in the type it holds for the command and the syntax used to invoke it.
+    *   In **Contender 1**, the invoker holds a `Command*` and calls `execute()`.
+    *   In **Contender 2**, the invoker holds a `std::unique_ptr<Command>` (where `Command` is a functor) and calls the function-call operator `(*command)()`.
+    *   In **Contender 3**, the invoker holds a `std::function<void()>` and calls it directly `command()`.
+
+    Despite these internal changes to the command's representation and invocation mechanism, the *essence* of the invoker's role remains the same: it stores a callable entity and executes it when an action occurs (e.g., `buttonPress()` or `onClick()`). The invoker remains decoupled from the concrete actions, only knowing how to store and trigger "something callable."
