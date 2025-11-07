@@ -186,7 +186,15 @@ This method is now responsible for both the operation and the traversal.
 Challenge: Modify your visit(Section s) method to add the traversal logic you just removed from Section::accept.
 
 ```java
+public void visit(Section s) {
+    // 1. Operation
+    System.out.println("Section: " + s.getTitle());
 
+    // 2. Traversal
+    for (DocumentPart child : s.getChildren()) {
+        child.accept(this);
+    }
+}
 ```
 
 Run your main method again. The output should be identical!
@@ -195,4 +203,27 @@ Run your main method again. The output should be identical!
 
 - Q1: What is the major advantage of the Part 2 ("Visitor Decides") design?
 
+By moving the traversal logic out of the DocumentPart classes and into the Visitor itself, you gain the ability to define different traversal algorithms for different visitors.
+
+For example:
+
+- One visitor could perform a standard pre-order traversal (visiting the parent section before its children).
+- Another visitor could easily implement a post-order traversal (visiting children before the parent).
+- A third visitor could be written to only visit the first level of children, or to skip sections with a specific title.
+
+This makes the system much more powerful, as the traversal algorithm is no longer hardcoded into the object structure itself. The element
+classes become simpler, and all the "visiting" logic, including traversal, is centralized in the visitor.
+
 - Q2: In Part 2, how would you change visit(Section s) to print a post-order ToC (where children are printed before their parent section)?
+
+```java
+public void visit(Section s){
+    // 1. Traverse all children first
+    for (DocumentPart child : s.getChildren()) {
+        child.accept(this);
+    }
+
+    // 2. Then, process the parent node
+    System.out.println("Section: " + s.getTitle());
+}
+```
