@@ -1,6 +1,11 @@
 # Mediator
 
-you can use observer design pattern along with mediator. i.e., everyone subscribes to mediator.
+## Notes
+
+- you can use observer design pattern along with mediator. i.e., everyone subscribes to mediator.
+- if there's a new Collegues that doesn't follow the existing interface, we can use adaptor design pattern to let them work together.
+
+## In-class Exercise
 
 ### Scenario: Air Traffic Control (ATC) Design
 
@@ -16,21 +21,31 @@ Your task is to answer the following design questions based on the code given. T
 
 ### Questions
 
-1. The Full Communication Trace
+#### 1. The Full Communication Trace
 
 Trace the full sequence of method calls that happens when a `CommercialAirplane`'s `requestTakeoff()` method is first called. List the method calls in order, starting from the plane's request and ending with the message being printed to the console.
 
-2. The Benefit: Decoupling & Extensibility
+`CommercialAirplane`'s `requestTakeoff()` -> `mediator.requestTakeoff()` -> all the registered airplanes calling `receiveInstruction`
+
+#### 2. The Benefit: Decoupling & Extensibility
 
 - Part A (Decoupling): Look at the `CommercialAirplane` class. How does it demonstrate it is decoupled from its peers (i.e., other planes)? (Hint: What references does it not have?)
 
+`CommercialAirplane` only knows its mediator.
+
 - Part B (Extensibility): Because of this decoupling, if you add a new `CargoPlane` class (that implements Airplane), do you need to modify the existing `CommercialAirplane` or `AirportController` classes? Why or why not?
 
-3. The Drawback: The Trade-Off
+No, we can create `CargoPlane` and register it to the `AirportController`.
+
+#### 3. The Drawback: The Trade-Off
 
 The Mediator pattern achieves simplicity by **centralizing** all coordination logic into the `AirportController`.
 
 This centralized simplicity comes at a cost. What is the primary design risk or problem introduced by centralizing all this logic into one class? (Hint: Consider what happens if the airport system adds 100 different coordination checks.)
+
+The mediator class, `AirportController`, becomes fat and hard to maintain due to all many if-else statements.
+Mediator becomes a **god class**.
+Mediator does not follow open-close principles, but Concrete Colleague does.
 
 #### Java
 
@@ -45,6 +60,7 @@ public interface ControlTower {
 public interface Airplane {
     void requestTakeoff();
     void requestLanding();
+    // NOTE: this method could be a callback method, using observer design pattern
     void receiveInstruction(String message); // call back from Mediator
 }
 
