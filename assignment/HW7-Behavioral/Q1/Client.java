@@ -121,8 +121,7 @@ class NetworkFunction extends NetworkComponent implements Visitable {
     }
 }
 
-// --- Concrete Visitors for Reports ---
-
+// Concrete visitor for resource visualization report
 class ResourceUtilizationReportVisitor implements Visitor {
     private StringBuilder report = new StringBuilder();
 
@@ -155,6 +154,7 @@ class ResourceUtilizationReportVisitor implements Visitor {
     }
 }
 
+// Concrete visitor for performance report
 class PerformanceReportVisitor implements Visitor {
     private StringBuilder report = new StringBuilder();
 
@@ -174,7 +174,6 @@ class PerformanceReportVisitor implements Visitor {
 
     @Override
     public void visit(NetworkFunction nf) {
-        // Not part of the performance report as per the requirements
         // No action needed for NetworkFunction in this report
     }
 
@@ -183,23 +182,14 @@ class PerformanceReportVisitor implements Visitor {
     }
 }
 
-// Main class acts as the client
 public class Client {
     public static void main(String[] args) {
-        // The SDN controller has a global view of the network components.
-        // We create a list of visitable elements.
         List<Visitable> visitableComponents = new ArrayList<>();
         visitableComponents.add(new SDNController("Controller1"));
         visitableComponents.add(new NetworkSwitch("Switch1"));
         visitableComponents.add(new NetworkSwitch("Switch2"));
         visitableComponents.add(new NetworkFunction("Firewall-NF"));
 
-        // Client usage of the pattern:
-        // 1. Create a visitor for the desired report.
-        // 2. Iterate through the components and call accept() on each.
-        // 3. Get the final report from the visitor.
-
-        // --- Generate Resource Utilization Report ---
         ResourceUtilizationReportVisitor resourceVisitor = new ResourceUtilizationReportVisitor();
         System.out.println("Generating Resource Utilization Report...");
         for (Visitable elem : visitableComponents) {
@@ -207,7 +197,6 @@ public class Client {
         }
         System.out.println(resourceVisitor.getReport());
 
-        // --- Generate Performance Report ---
         PerformanceReportVisitor performanceVisitor = new PerformanceReportVisitor();
         System.out.println("Generating Performance Report...");
         for (Visitable elem : visitableComponents) {
